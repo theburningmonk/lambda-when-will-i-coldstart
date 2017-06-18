@@ -1,0 +1,109 @@
+service: when-will-i-coldstart
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+
+# you can overwrite defaults here
+  stage: dev
+  region: us-east-1
+
+# you can add statements to the Lambda function's IAM Role here
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "events:ListRules"
+      Resource: "arn:aws:events:*:*:rule/*"
+    - Effect: "Allow"
+      Action:
+        - "events:PutRule"
+      Resource: "arn:aws:events:*:*:rule/${self:service}-${self:provider.stage}-*"
+    - Effect: "Allow"
+      Action:
+        - "lambda:InvokeFunction"
+      Resource: "arn:aws:lambda:*:*:function:${self:service}-${self:provider.stage}-system-under-test-*"
+    - Effect: "Allow"
+      Action:
+        - "cloudwatch:PutMetricData"
+      Resource: "*"
+
+# you can define service wide environment variables here
+#  environment:
+#    variable1: value1
+
+# you can add packaging information here
+#package:
+#  include:
+#    - include-me.js
+#    - include-me-dir/**
+#  exclude:
+#    - exclude-me.js
+#    - exclude-me-dir/**
+
+functions:
+  system-under-test-128:
+    handler: functions/system-under-test.handler
+    memorySize: 128
+
+  system-under-test-256:
+    handler: functions/system-under-test.handler
+    memorySize: 256
+
+  system-under-test-512:
+    handler: functions/system-under-test.handler
+    memorySize: 512
+
+  system-under-test-1024:
+    handler: functions/system-under-test.handler
+    memorySize: 1024
+
+  system-under-test-1536:
+    handler: functions/system-under-test.handler
+    memorySize: 1536
+  
+  find-idle-timeout-128:
+    handler: functions/find-idle-timeout.handler
+    events:
+      - schedule: rate(10 minutes)
+    environment:
+      TARGET_NAME: ${self:service}-${self:provider.stage}-system-under-test-128
+  
+  find-idle-timeout-256:
+    handler: functions/find-idle-timeout.handler
+    events:
+      - schedule: rate(10 minutes)
+    environment:
+      TARGET_NAME: ${self:service}-${self:provider.stage}-system-under-test-256
+  
+  find-idle-timeout-512:
+    handler: functions/find-idle-timeout.handler
+    events:
+      - schedule: rate(10 minutes)
+    environment:
+      TARGET_NAME: ${self:service}-${self:provider.stage}-system-under-test-512
+  
+  find-idle-timeout-1024:
+    handler: functions/find-idle-timeout.handler
+    events:
+      - schedule: rate(10 minutes)
+    environment:
+      TARGET_NAME: ${self:service}-${self:provider.stage}-system-under-test-1024
+  
+  find-idle-timeout-1536:
+    handler: functions/find-idle-timeout.handler
+    events:
+      - schedule: rate(10 minutes)
+    environment:
+      TARGET_NAME: ${self:service}-${self:provider.stage}-system-under-test-1536
+
+# you can add CloudFormation resource templates here
+#resources:
+#  Resources:
+#    NewResource:
+#      Type: AWS::S3::Bucket
+#      Properties:
+#        BucketName: my-new-bucket
+#  Outputs:
+#     NewOutput:
+#       Description: "Description for the output"
+#       Value: "Some output value"
