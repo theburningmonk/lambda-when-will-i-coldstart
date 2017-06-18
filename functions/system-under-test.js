@@ -28,8 +28,9 @@ module.exports.handler = co.wrap(function* (event, context, callback) {
     isColdstart = true;
     console.log("this is a coldstart");
     yield trackColdstart(context.functionName);
-    callback(null, "true");
+
+    callback(null, { isColdstart : true });
   }
 
-  callback(null, "false");
+  callback(null, { isColdstart : false });
 });
