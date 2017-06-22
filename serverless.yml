@@ -36,6 +36,18 @@ functions:
     handler: functions/system-under-test.handler
     memorySize: 1024
 
+  system-under-test-1152:
+    handler: functions/system-under-test.handler
+    memorySize: 1152
+
+  system-under-test-1280:
+    handler: functions/system-under-test.handler
+    memorySize: 1280
+
+  system-under-test-1408:
+    handler: functions/system-under-test.handler
+    memorySize: 1408
+
   system-under-test-1536:
     handler: functions/system-under-test.handler
     memorySize: 1536
